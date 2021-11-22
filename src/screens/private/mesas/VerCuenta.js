@@ -4,7 +4,7 @@ import { View, Text } from 'react-native';
 const VerCuenta = () => {
     return (
         <View>
-            <Text></Text>
+            <Text>Hola</Text>
         </View>
     );
 };

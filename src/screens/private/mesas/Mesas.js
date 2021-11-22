@@ -4,7 +4,7 @@ import { View, Text } from 'react-native';
 const Mesas = () => {
     return (
         <View>
-            <Text>Vamos </Text>
+            <Text>Da Mesas</Text>
         </View>
     );
 };
