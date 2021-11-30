@@ -3,12 +3,13 @@ import { StyleSheet } from 'react-native';
 export default StyleSheet.create({
     contenedorGral: {
         flex: 1,
+        backgroundColor: '#fff',
     },
     contenedor: {
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#fff',
+        backgroundColor: '#FFF',
     },
     imgLogin: {
         height: 200,
@@ -17,14 +18,15 @@ export default StyleSheet.create({
         borderRadius: 200,
     },
     input: {
-        paddingHorizontal: 10,
-        paddingVertical: 5,
-        width: '95%',
-        borderWidth: 2,
-        borderColor: '#585858',
-        fontSize: 16,
-        borderRadius: 10,
+        paddingHorizontal: 16,
+        paddingVertical: 9,
+        width: '90%',
+        borderWidth: 2.5,
+        borderColor: '#898989',
+        fontSize: 17,
+        borderRadius: 15,
         marginVertical: 5,
+        fontWeight: '900',
     },
     boton1: {
         borderWidth: 1,
@@ -32,14 +34,21 @@ export default StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         width: 185,
-        height: 50,
-        backgroundColor: '#950101',
-        borderRadius: 10,
-        marginVertical: 7,
+        height: 52,
+        // backgroundColor: '#950101',
+        backgroundColor: '#fff',
+        borderRadius: 11,
+        marginVertical: 5,
     },
     textoBoton: {
         color: '#fff',
         fontWeight: 'bold',
         fontSize: 16,
+    },
+    titulo: {
+        textAlign: 'center',
+        fontSize: 20,
+        fontWeight: 'bold',
+        marginBottom: 20,
     },
 });

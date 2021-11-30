@@ -5,10 +5,10 @@ import {
     View,
     TouchableOpacity,
     ScrollView,
+    Modal,
 } from 'react-native';
-import Modal from 'react-native-modal';
 
-export default class App extends Component {
+export default class AppScroll extends Component {
     constructor(props) {
         super(props);
         this.state = {

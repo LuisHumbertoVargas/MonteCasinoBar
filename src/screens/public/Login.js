@@ -10,20 +10,33 @@ import {
     ActivityIndicator,
 } from 'react-native';
 import estilos from '../../styles/estilos';
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import {
+    getAuth,
+    signInWithEmailAndPassword,
+    GoogleAuthProvider,
+    signInWithPopup,
+    signInWithRedirect,
+} from 'firebase/auth';
+import { not } from 'react-native-reanimated';
 
 const Login = (props) => {
+    // Hooks de los inputs
     const [email, setEmail] = useState('humberto@montecasinobar.com');
-    const [password, setPassword] = useState('123456');
+    const [password, setPassword] = useState('12345678');
 
+    // Hooks de los elementos visuales
     const [aiVisible, setAiVisible] = useState(false);
     const [btnVisible, setBtnVisible] = useState(true);
     const [tiVisible, setTiVisible] = useState(true);
 
+    // Autenticación con Google
+    const provider = new GoogleAuthProvider();
+    const auth = getAuth();
+
     const validarLogin = async () => {
         if (email.length < 7 && !email.match('@')) {
             Alert.alert(
-                'Atención',
+                'Inicio de Sesión Fallido',
                 'la contraseña o el correo es incorrecto, vuelve a intentarlo',
                 [
                     {
@@ -37,9 +50,9 @@ const Login = (props) => {
             );
             return;
         }
-        if (password.length !== 6) {
+        if (password.length !== 8) {
             Alert.alert(
-                'Atención',
+                'Inicio de Sesión Fallido',
                 'la contraseña o el correo es incorrecto, vuelve a intentarlo',
                 [
                     {
@@ -71,8 +84,8 @@ const Login = (props) => {
             // Mensaje
             let mensaje = `${usuarioAuth.user.email}.`;
             mensaje += usuarioAuth.user.emailVerified
-                ? '\n\nCuenta vericada'
-                : '\n\nCuenta sin verificar';
+                ? '\n\nBIENVENIDO'
+                : '\n\nConfirmar correo de verificación';
 
             // Alerta con el mensaje
             Alert.alert('Bienvenido', mensaje, [
@@ -86,38 +99,99 @@ const Login = (props) => {
                     },
                 },
             ]);
-        } catch (e) {
-            console.log(e.code);
-            Alert.alert('ERROR', e.code, [
-                {
-                    text: 'Corregir',
-                    onPress: () => {
-                        setAiVisible(false);
-                        setBtnVisible(true);
-                        setTiVisible(true);
+        } catch (error) {
+            // Handle Errors here.
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            console.log(errorCode, errorMessage);
+            // The email of the user's account used.
+            const email = error.email;
+            // The AuthCredential type that was used.
+            const credential = GoogleAuthProvider.credentialFromError(error);
+            // ...
+            console.log(email, credential);
+            Alert.alert(
+                'Acceso Restringido',
+                'Solicita a un administrador tu registro.',
+                [
+                    {
+                        text: 'Volver a intentar',
+                        onPress: () => {
+                            setAiVisible(false);
+                            setBtnVisible(true);
+                            setTiVisible(true);
+                        },
                     },
-                },
-            ]);
+                ]
+            );
         }
     };
 
+    const signInGoogle = () => {
+        signInWithPopup(auth, provider)
+            .then((result) => {
+                // This gives you a Google Access Token. You can use it to access the Google API.
+                const credential =
+                    GoogleAuthProvider.credentialFromResult(result);
+                const token = credential.accessToken;
+                // The signed-in user info.
+                const user = result.user;
+                console.log(user, token);
+                // ...
+            })
+            .catch((error) => {
+                // Handle Errors here.
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                console.log(errorCode, errorMessage);
+                // The email of the user's account used.
+                const email = error.email;
+                // The AuthCredential type that was used.
+                const credential =
+                    GoogleAuthProvider.credentialFromError(error);
+                // ...
+                console.log(email, credential);
+            });
+    };
     return (
         <View style={estilos.contenedorGral}>
-            <View style={{ ...estilos.contenedor, flex: 2 }}>
+            <View style={{ ...estilos.contenedor, marginBottom: 40 }}>
                 <Image
-                    style={estilos.imgLogin}
+                    style={{ ...estilos.imgLogin, marginBottom: 40 }}
                     source={require('./../../../assets/images/Logo.png')}
                 />
-            </View>
-
-            <View style={estilos.contenedor}>
+                <Text
+                    style={{
+                        ...estilos.titulo,
+                        display: aiVisible ? 'none' : 'flex',
+                        fontSize: 28,
+                        color: '#000',
+                        marginBottom: 40,
+                    }}
+                >
+                    MONTE CASINO BAR
+                </Text>
                 <ActivityIndicator
+                    style={{ display: aiVisible ? 'flex' : 'none' }}
                     color='black'
                     size='large'
-                    style={{ display: aiVisible ? 'flex' : 'none' }}
                 />
+                <Text
+                    style={{
+                        ...estilos.titulo,
+                        display: aiVisible ? 'flex' : 'none',
+                        fontSize: 16,
+                    }}
+                >
+                    INGRESANDO...
+                </Text>
+
                 <TextInput
-                    style={estilos.input}
+                    style={{
+                        ...estilos.input,
+                        marginTop: 1,
+                        display: aiVisible ? 'none' : 'flex',
+                    }}
                     placeholder='Email'
                     value={email}
                     onChangeText={(event) => setEmail(event)}
@@ -127,7 +201,11 @@ const Login = (props) => {
                     editable={tiVisible}
                 ></TextInput>
                 <TextInput
-                    style={estilos.input}
+                    style={{
+                        ...estilos.input,
+                        marginBottom: 25,
+                        display: aiVisible ? 'none' : 'flex',
+                    }}
                     placeholder='Contraseña'
                     value={password}
                     onChangeText={(event) => setPassword(event)}
@@ -136,19 +214,46 @@ const Login = (props) => {
                     maxLength={8}
                     editable={tiVisible}
                 ></TextInput>
-            </View>
-
-            <View
-                style={{
-                    ...estilos.contenedor,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    display: btnVisible ? 'flex' : 'none',
-                }}
-            >
-                <TouchableOpacity style={estilos.boton1} onPress={validarLogin}>
-                    <Text style={estilos.textoBoton}>INGRESAR</Text>
+                <TouchableOpacity
+                    style={{
+                        ...estilos.boton1,
+                        marginBottom: 9,
+                        borderColor: '#535353',
+                        borderWidth: 2.5,
+                        display: aiVisible ? 'none' : 'flex',
+                    }}
+                    onPress={validarLogin}
+                >
+                    <Text
+                        style={{
+                            ...estilos.textoBoton,
+                            color: '#000',
+                            display: aiVisible ? 'none' : 'flex',
+                        }}
+                    >
+                        INGRESAR
+                    </Text>
                 </TouchableOpacity>
+                <TouchableOpacity
+                    style={{
+                        ...estilos.boton1,
+                        backgroundColor: '#1a73e8',
+                        display: aiVisible ? 'none' : 'flex',
+                    }}
+                    onPress={signInGoogle}
+                >
+                    <Text style={{ ...estilos.textoBoton, fontSize: 21 }}>
+                        Google
+                    </Text>
+                </TouchableOpacity>
+                <Text
+                    style={{
+                        fontWeight: '600',
+                        display: aiVisible ? 'none' : 'flex',
+                    }}
+                >
+                    Sign In with Google
+                </Text>
             </View>
         </View>
     );

@@ -1,17 +1,22 @@
 import React, { useState } from 'react';
-import { View, Text, Button, FlatList, ScrollView, Image } from 'react-native';
+import { View, Text, FlatList, Button, Image } from 'react-native';
 import { getDoc, onSnapshot, collection, doc } from '@firebase/firestore';
-import db from './../../../database/firebase';
+import db from '../../../database/firebase';
 import estilos from '../../../styles/estilos';
-// import Modal from './../../../components/Modal';
 
-const Mesas = (props) => {
+const getProductos = () => {
+    const [nombre, setNombre] = useState('Heineken XX');
+    const [imagen, setImagen] = useState(
+        require('../../../../assets/images/Logo.png')
+    );
+    const [precio, setPrecio] = useState('$35.00');
+
     const [data, setData] = useState([]);
     const [id, setId] = useState([]);
 
-    const obtenerMesas = async () => {
+    const obtenerProductos = async () => {
         const consulta = await onSnapshot(
-            collection(db.db, 'mesa'),
+            collection(db.db, 'productos'),
             (snapshot) => {
                 console.log(snapshot.docs.map((doc) => doc.data()));
                 setData(snapshot.docs.map((doc) => doc.data()));
@@ -33,9 +38,8 @@ const Mesas = (props) => {
                     color: '#fff',
                 }}
             >
-                DA MESAS
+                PRODUCTOS
             </Text>
-            {/* <Modal></Modal> */}
             <FlatList
                 data={data}
                 renderItem={(item) => (
@@ -65,9 +69,9 @@ const Mesas = (props) => {
                             >
                                 {/* TODO: darle un id único */}
 
-                                <Text>Mesa: {item.item.nombre} </Text>
-                                <Text>Estado: {item.item.estado} </Text>
-                                <Text>bloqueado: {item.item.bloqueado} </Text>
+                                <Text>Nombre: {item.item.nombre} </Text>
+                                <Text>Precio: {item.item.precio} </Text>
+                                {/* <Text>bloqueado: {item.item.bloqueado} </Text> */}
                             </View>
                         </View>
                     </>
@@ -76,9 +80,9 @@ const Mesas = (props) => {
                     id;
                 }}
             ></FlatList>
-            <Button title='get mesas' onPress={obtenerMesas}></Button>
+            <Button title='get Productos' onPress={obtenerProductos}></Button>
         </View>
     );
 };
 
-export default Mesas;
+export default getProductos;
