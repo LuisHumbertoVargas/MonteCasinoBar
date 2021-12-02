@@ -1,13 +1,15 @@
 import React, { useEffect } from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import Perfil from './perfil/Perfil';
-import Mesas from './mesas/Mesas';
+import Mesas from './mesas/comandas/Mesas';
 import CrearComanda from './mesas/CrearComanda';
 import VerCuenta from './mesas/VerCuenta';
 import getOrden, { obtenerDatos } from './mesas/getOrden';
 import { LogBox } from 'react-native';
-import addOrden from './mesas/addOrden';
 import getProductos from './productos/getProductos';
+import Comandas from './mesas/Comandas';
+import NuevaOrden from './mesas/comandas/NuevaOrden';
+// import ModalComanda from '../../components/ModalComanda';
 // import AppScroll from '../../components/Compo_Scroll';
 
 const Drawer = createDrawerNavigator();
@@ -32,11 +34,13 @@ const Home = () => {
 
     return (
         <Drawer.Navigator>
+            {/* <Drawer.Screen name='ModalComanda' component={ModalComanda} /> */}
+            <Drawer.Screen name='Comandas' component={Comandas} />
+            <Drawer.Screen name='CrearComandas' component={CrearComanda} />
             <Drawer.Screen name='Productos' component={getProductos} />
-            <Drawer.Screen name='Comandas' component={CrearComanda} />
             <Drawer.Screen name='Mesas' component={Mesas} />
             <Drawer.Screen name='getOrden' component={getOrden} />
-            <Drawer.Screen name='addOrden' component={addOrden} />
+            <Drawer.Screen name='NuevaOrden' component={NuevaOrden} />
             <Drawer.Screen name='Perfil' component={Perfil} />
             <Drawer.Screen name='VerCuenta' component={VerCuenta} />
         </Drawer.Navigator>

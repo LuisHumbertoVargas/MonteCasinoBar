@@ -79,7 +79,9 @@ const Login = (props) => {
                 password
             );
 
-            // console.log('Datos del usuario Auth : ', usuarioAuth.user);
+            // TODO : usarla como Global
+            console.log('Datos del usuario Auth : ', usuarioAuth.user.uid);
+            const MiUid = usuarioAuth.user.uid;
 
             // Mensaje
             let mensaje = `${usuarioAuth.user.email}.`;
@@ -240,7 +242,8 @@ const Login = (props) => {
                         backgroundColor: '#1a73e8',
                         display: aiVisible ? 'none' : 'flex',
                     }}
-                    onPress={signInGoogle}
+                    // onPress={signInGoogle}
+                    onPress={''}
                 >
                     <Text style={{ ...estilos.textoBoton, fontSize: 21 }}>
                         Google

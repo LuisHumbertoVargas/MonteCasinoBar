@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, Button, FlatList, ScrollView, Image } from 'react-native';
 import { getDoc, onSnapshot, collection, doc } from '@firebase/firestore';
-import db from './../../../database/firebase';
-import estilos from '../../../styles/estilos';
-// import Modal from './../../../components/Modal';
+import db from './../../../../database/firebase';
+import estilos from './../../../../styles/estilos';
 
 const Mesas = (props) => {
     const [data, setData] = useState([]);
@@ -16,6 +15,7 @@ const Mesas = (props) => {
                 console.log(snapshot.docs.map((doc) => doc.data()));
                 setData(snapshot.docs.map((doc) => doc.data()));
                 setId(snapshot.docs.map((id) => id.id));
+                // console.log(snapshot.docs.map((id) => id.id));
             }
         );
 
@@ -48,7 +48,7 @@ const Mesas = (props) => {
                             }}
                         >
                             <Image
-                                source={require('./../../../../assets/images/Logo.png')}
+                                source={require('./.././../../../../assets/images/Logo.png')}
                                 style={{
                                     width: 80,
                                     height: 80,

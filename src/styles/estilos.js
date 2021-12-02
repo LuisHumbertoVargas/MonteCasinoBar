@@ -17,6 +17,12 @@ export default StyleSheet.create({
         resizeMode: 'contain',
         borderRadius: 200,
     },
+    imgDrinks: {
+        height: 100,
+        width: 100,
+        resizeMode: 'contain',
+        borderRadius: 100,
+    },
     input: {
         paddingHorizontal: 16,
         paddingVertical: 9,
@@ -50,5 +56,15 @@ export default StyleSheet.create({
         fontSize: 20,
         fontWeight: 'bold',
         marginBottom: 20,
+    },
+    picker: {
+        paddingHorizontal: 10,
+        paddingVertical: 2,
+        width: '82%',
+        borderWidth: 2,
+        borderColor: '#585858',
+        fontSize: 16,
+        borderRadius: 10,
+        marginVertical: 6,
     },
 });
