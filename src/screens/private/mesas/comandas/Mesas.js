@@ -1,10 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, Button, FlatList, ScrollView, Image } from 'react-native';
 import { getDoc, onSnapshot, collection, doc } from '@firebase/firestore';
 import db from './../../../../database/firebase';
 import estilos from './../../../../styles/estilos';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const Mesas = (props) => {
+    useEffect(() => {
+        obtenerMesas();
+    }, []);
+
     const [data, setData] = useState([]);
     const [id, setId] = useState([]);
 
@@ -33,50 +38,54 @@ const Mesas = (props) => {
                     color: '#fff',
                 }}
             >
-                DA MESAS
+                MESAS
             </Text>
             {/* <Modal></Modal> */}
             <FlatList
                 data={data}
                 renderItem={(item) => (
                     <>
-                        <View
-                            style={{
-                                margin: 10,
-                                flexDirection: 'row',
-                                flex: 1,
-                            }}
-                        >
-                            <Image
-                                source={require('./.././../../../../assets/images/Logo.png')}
-                                style={{
-                                    width: 80,
-                                    height: 80,
-                                    borderRadius: 40,
-                                    marginHorizontal: 10,
-                                }}
-                            ></Image>
+                        <TouchableOpacity>
                             <View
                                 style={{
                                     margin: 10,
-
+                                    flexDirection: 'row',
                                     flex: 1,
                                 }}
                             >
-                                {/* TODO: darle un id único */}
+                                <Image
+                                    source={require('./.././../../../../assets/images/Logo.png')}
+                                    style={{
+                                        width: 80,
+                                        height: 80,
+                                        borderRadius: 40,
+                                        marginHorizontal: 10,
+                                    }}
+                                ></Image>
+                                <View
+                                    style={{
+                                        margin: 10,
 
-                                <Text>Mesa: {item.item.nombre} </Text>
-                                <Text>Estado: {item.item.estado} </Text>
-                                <Text>bloqueado: {item.item.bloqueado} </Text>
+                                        flex: 1,
+                                    }}
+                                >
+                                    {/* TODO: darle un id único */}
+
+                                    <Text>Mesa: {item.item.nombre} </Text>
+                                    <Text>Estado: {item.item.estado} </Text>
+                                    <Text>
+                                        bloqueado: {item.item.bloqueado}{' '}
+                                    </Text>
+                                </View>
                             </View>
-                        </View>
+                        </TouchableOpacity>
                     </>
                 )}
                 keyExtractor={() => {
                     id;
                 }}
             ></FlatList>
-            <Button title='get mesas' onPress={obtenerMesas}></Button>
+            {/* <Button title='get mesas' onPress={obtenerMesas}></Button> */}
         </View>
     );
 };

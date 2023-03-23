@@ -6,6 +6,7 @@ import { FontAwesome5, MaterialIcons, Entypo } from '@expo/vector-icons';
 import NuevaOrden from './comandas/NuevaOrden';
 import Perfil from '../perfil/Perfil';
 import Mesas from './comandas/Mesas';
+import getProductos from '../productos/getProductos';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -45,8 +46,8 @@ const Comandas = () => {
             />
 
             <Tab.Screen
-                name='Perfil'
-                component={Perfil}
+                name='Productos'
+                component={getProductos}
                 options={{
                     tabBarIcon: () => (
                         <Entypo name='user' size={28} color='#fff' />

@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+GLOBAL = require('./../../components/global');
 import {
     View,
     Text,
@@ -8,6 +9,7 @@ import {
     TouchableOpacity,
     Alert,
     ActivityIndicator,
+    LogBox,
 } from 'react-native';
 import estilos from '../../styles/estilos';
 import {
@@ -17,12 +19,27 @@ import {
     signInWithPopup,
     signInWithRedirect,
 } from 'firebase/auth';
-import { not } from 'react-native-reanimated';
+// import { not } from 'react-native-reanimated';
+// import sjcl from 'sjcl';
 
 const Login = (props) => {
+    useEffect(() => {
+        // indicamos los tipos de warnings que queremos dejar de ver
+
+        // TODOS
+        LogBox.ignoreAllLogs();
+
+        // Solo algunos warnings
+        // LogBox.ignoreLogs([
+        //     'Animated: `useNativeDriver`',
+        //     'Setting a timer for a long period of time',
+        //     'AsyncStorage has been extracted from react-native core',
+        // ]);
+    }, []);
+
     // Hooks de los inputs
-    const [email, setEmail] = useState('humberto@montecasinobar.com');
-    const [password, setPassword] = useState('12345678');
+    const [email, setEmail] = useState('juanrodriguez@montecasinobar.com');
+    const [password, setPassword] = useState('juanr123');
 
     // Hooks de los elementos visuales
     const [aiVisible, setAiVisible] = useState(false);
@@ -32,6 +49,52 @@ const Login = (props) => {
     // Autenticación con Google
     const provider = new GoogleAuthProvider();
     const auth = getAuth();
+
+    const encryptSHA256 = async (message) => {
+        // encode as UTF-8
+        const msgBuffer = new TextEncoder('utf-8').encode(message);
+
+        // hash the message
+        const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+
+        // convert ArrayBuffer to Array
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+
+        // convert bytes to hex string
+        const hashHex = hashArray
+            .map((b) => ('00' + b.toString(16)).slice(-2))
+            .join('');
+        return console.log(hashHex);
+    };
+    // encryptSHA256('Hola');
+
+    const hashSHA256 = (password) => {
+        const myBitArray = sjcl.hash.sha256.hash(myString);
+        const myHash = sjcl.codec.hex.fromBits(myBitArray);
+        setPassword(myhash);
+        console.log(password);
+        return myHash, password;
+    };
+
+    const cyrb53 = (password, seed = 0) => {
+        let h1 = 0xdeadbeef ^ seed,
+            h2 = 0x41c6ce57 ^ seed;
+        for (let i = 0, ch; i < password.length; i++) {
+            ch = password.charCodeAt(i);
+            h1 = Math.imul(h1 ^ ch, 2654435761);
+            h2 = Math.imul(h2 ^ ch, 1597334677);
+        }
+        h1 =
+            Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^
+            Math.imul(h2 ^ (h2 >>> 13), 3266489909);
+        h2 =
+            Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^
+            Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+        var pass = 4294967296 * (2097151 & h2) + (h1 >>> 0);
+        setPassword(pass);
+        console.log(pass);
+        return 4294967296 * (2097151 & h2) + (h1 >>> 0);
+    };
 
     const validarLogin = async () => {
         if (email.length < 7 && !email.match('@')) {
@@ -50,9 +113,9 @@ const Login = (props) => {
             );
             return;
         }
-        if (password.length !== 8) {
+        if (password.length < 7) {
             Alert.alert(
-                'Inicio de Sesión Fallido',
+                'Inicio de Sesión Fallido1',
                 'la contraseña o el correo es incorrecto, vuelve a intentarlo',
                 [
                     {
@@ -76,12 +139,12 @@ const Login = (props) => {
             const usuarioAuth = await signInWithEmailAndPassword(
                 auth,
                 email,
-                password
+                cyrb53(password)
             );
 
             // TODO : usarla como Global
             console.log('Datos del usuario Auth : ', usuarioAuth.user.uid);
-            const MiUid = usuarioAuth.user.uid;
+            GLOBAL.UID = usuarioAuth.user.uid;
 
             // Mensaje
             let mensaje = `${usuarioAuth.user.email}.`;
@@ -157,7 +220,13 @@ const Login = (props) => {
     };
     return (
         <View style={estilos.contenedorGral}>
-            <View style={{ ...estilos.contenedor, marginBottom: 40 }}>
+            <View
+                style={{
+                    ...estilos.contenedor,
+                    marginBottom: 40,
+                    backgroundColor: '#232323',
+                }}
+            >
                 <Image
                     style={{ ...estilos.imgLogin, marginBottom: 40 }}
                     source={require('./../../../assets/images/Logo.png')}
@@ -167,7 +236,7 @@ const Login = (props) => {
                         ...estilos.titulo,
                         display: aiVisible ? 'none' : 'flex',
                         fontSize: 28,
-                        color: '#000',
+                        color: '#fff',
                         marginBottom: 40,
                     }}
                 >
@@ -193,6 +262,7 @@ const Login = (props) => {
                         ...estilos.input,
                         marginTop: 1,
                         display: aiVisible ? 'none' : 'flex',
+                        color: '#fff',
                     }}
                     placeholder='Email'
                     value={email}
@@ -207,13 +277,14 @@ const Login = (props) => {
                         ...estilos.input,
                         marginBottom: 25,
                         display: aiVisible ? 'none' : 'flex',
+                        color: '#fff',
                     }}
                     placeholder='Contraseña'
                     value={password}
                     onChangeText={(event) => setPassword(event)}
                     keyboardType='default'
                     secureTextEntry={true}
-                    maxLength={8}
+                    // maxLength={8}
                     editable={tiVisible}
                 ></TextInput>
                 <TouchableOpacity
@@ -253,6 +324,7 @@ const Login = (props) => {
                     style={{
                         fontWeight: '600',
                         display: aiVisible ? 'none' : 'flex',
+                        color: '#fff',
                     }}
                 >
                     Sign In with Google

@@ -1,10 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, Button, Image } from 'react-native';
 import { getDoc, onSnapshot, collection, doc } from '@firebase/firestore';
 import db from '../../../database/firebase';
 import estilos from '../../../styles/estilos';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const getProductos = () => {
+    useEffect(() => {
+        obtenerProductos();
+    }, []);
+
     const [nombre, setNombre] = useState('Heineken XX');
     const [imagen, setImagen] = useState(
         require('../../../../assets/images/Logo.png')
@@ -44,43 +49,45 @@ const getProductos = () => {
                 data={data}
                 renderItem={(item) => (
                     <>
-                        <View
-                            style={{
-                                margin: 10,
-                                flexDirection: 'row',
-                                flex: 1,
-                            }}
-                        >
-                            <Image
-                                source={require('./../../../../assets/images/Logo.png')}
-                                style={{
-                                    width: 80,
-                                    height: 80,
-                                    borderRadius: 40,
-                                    marginHorizontal: 10,
-                                }}
-                            ></Image>
+                        <TouchableOpacity>
                             <View
                                 style={{
                                     margin: 10,
-
+                                    flexDirection: 'row',
                                     flex: 1,
                                 }}
                             >
-                                {/* TODO: darle un id único */}
+                                <Image
+                                    source={require('./../../../../assets/images/Logo.png')}
+                                    style={{
+                                        width: 80,
+                                        height: 80,
+                                        borderRadius: 40,
+                                        marginHorizontal: 10,
+                                    }}
+                                ></Image>
+                                <View
+                                    style={{
+                                        margin: 10,
 
-                                <Text>Nombre: {item.item.nombre} </Text>
-                                <Text>Precio: {item.item.precio} </Text>
-                                {/* <Text>bloqueado: {item.item.bloqueado} </Text> */}
+                                        flex: 1,
+                                    }}
+                                >
+                                    {/* TODO: darle un id único */}
+
+                                    <Text>Nombre: {item.item.nombre} </Text>
+                                    <Text>Precio: {item.item.precio} </Text>
+                                    {/* <Text>bloqueado: {item.item.bloqueado} </Text> */}
+                                </View>
                             </View>
-                        </View>
+                        </TouchableOpacity>
                     </>
                 )}
                 keyExtractor={() => {
                     id;
                 }}
             ></FlatList>
-            <Button title='get Productos' onPress={obtenerProductos}></Button>
+            {/* <Button title='get Productos' onPress={obtenerProductos}></Button> */}
         </View>
     );
 };

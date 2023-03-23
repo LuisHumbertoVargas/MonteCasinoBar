@@ -8,7 +8,7 @@
         "eject": "expo eject"
     },
     "dependencies": {
-        "@react-native-picker/picker": "^2.2.1",
+        "@react-native-picker/picker": "2.1.0",
         "@react-navigation/bottom-tabs": "^6.0.9",
         "@react-navigation/drawer": "^6.1.8",
         "@react-navigation/material-top-tabs": "^6.0.6",
@@ -27,7 +27,8 @@
         "react-native-screens": "~3.8.0",
         "react-native-tab-view": "^3.1.1",
         "react-native-uuid": "^2.0.1",
-        "react-native-web": "0.17.1"
+        "react-native-web": "0.17.1",
+        "sjcl": "^1.0.8"
     },
     "devDependencies": {
         "@babel/core": "^7.12.9"

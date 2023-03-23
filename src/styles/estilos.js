@@ -46,6 +46,15 @@ export default StyleSheet.create({
         borderRadius: 11,
         marginVertical: 5,
     },
+    button: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingVertical: 12,
+        paddingHorizontal: 32,
+        borderRadius: 4,
+        elevation: 3,
+        backgroundColor: 'black',
+    },
     textoBoton: {
         color: '#fff',
         fontWeight: 'bold',
